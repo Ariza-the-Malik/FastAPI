@@ -1,20 +1,3 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
-
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
@@ -31,7 +14,7 @@ class Course(BaseModel):
 
 @app.get("/")
 def read_root():
-    return{"Greetings": "Welcome to the world of ultra FastAPI"}
+    return{"greetings": "Welcome to the world of ultra FastAPI"}
 
 @app.get("/courses")
 def get_courses():
