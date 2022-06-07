@@ -1,26 +1,70 @@
 {
 	"info": {
-		"_postman_id": "f5e858e8-9a4b-4839-9bed-4ca59d34c74e",
+		"_postman_id": "f8d46e5a-deea-4eb1-9df2-1b5c6238169d",
 		"name": "fast_api",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21355238"
 	},
 	"item": [
 		{
-			"name": "Read Root",
+			"name": "Add course",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "bf9e2f88-2290-443b-8740-7e9da834ad30",
+						"exec": [
+							"pm.test(\"Status Code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"const response = pm.response.json();\r",
+							"pm.test(\"validate response schema\",function(){\r",
+							"    pm.expect(response).to.be.a(\"object\");\r",
+							"    pm.expect(response.name).to.be.equal(\"course1\");\r",
+							"    pm.expect(response.id).to.be.equals(1);\r",
+							"    pm.expect(response.price).to.be.equals(10.0);\r",
+							"    pm.expect(response.is_early_bird).to.be.equals(true);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 1,\r\n  \"name\": \"course1\",\r\n   \"price\": 10,\r\n  \"is_early_bird\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/courses",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all courses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
 						"exec": [
 							"pm.test(\"Status Code is 200\", function(){",
 							"    pm.response.to.have.status(200);",
 							"});",
 							"const response = pm.response.json();",
-							"pm.test(\"is valid schema\", function(){",
-							"    pm.expect(response).to.be.a(\"object\");",
-							"    pm.expect(response.greetings).to.be.eql(\"Welcome to the world of ultra FastAPI\");",
-							"});",
+							"pm.collectionVariables.set(\"courseId\",response[0].id);",
 							"",
 							""
 						],
@@ -32,16 +76,91 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/",
+					"raw": "{{host}}/courses",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						""
+						"courses"
 					]
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Get a course",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"const response = pm.response.json();\r",
+							"const courseId =pm.collectionVariables.get(\"courseId\");\r",
+							"pm.test(\"validate course\", function(){\r",
+							"    pm.expect(response.id).to.be.equal(courseId);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/courses/{{courseId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"courses",
+						"{{courseId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/courses/{{courseId}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"courses",
+						"{{courseId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "courseId",
+			"value": ""
 		}
 	]
 }
